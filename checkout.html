@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout | Monarch's Pipe Club</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Georgia", serif;
+      background-color: #000;
+      color: #dc2626;
+      line-height: 1.6;
+    }
+    header {
+      text-align: center;
+      border-bottom: 2px solid #7f1d1d;
+      padding: 30px;
+      background: #0a0a0a;
+    }
+    header h1 {
+      font-size: 2rem;
+      letter-spacing: 2px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #111;
+      border: 1px solid #7f1d1d;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255,0,0,0.3);
+    }
+    h2 {
+      border-bottom: 1px solid #7f1d1d;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #333;
+    }
+    .total {
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: right;
+      color: #f87171;
+    }
+    form {
+      margin-top: 30px;
+      display: grid;
+      gap: 15px;
+    }
+    label {
+      font-weight: bold;
+      color: #f87171;
+    }
+    input {
+      padding: 10px;
+      border: 1px solid #7f1d1d;
+      border-radius: 6px;
+      background: #0a0a0a;
+      color: #dc2626;
+    }
+    button {
+      margin-top: 20px;
+      background: transparent;
+      border: 1px solid #7f1d1d;
+      color: #dc2626;
+      padding: 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+      font-size: 1rem;
+    }
+    button:hover {
+      background: #7f1d1d;
+      color: #000;
+    }
+    .confirmation {
+      display: none;
+      text-align: center;
+      padding: 40px;
+      font-size: 1.2rem;
+      color: #f87171;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>MONARCH'S PIPE CLUB</h1>
+    <p>Checkout — The Ember Awaits</p>
+  </header>
+
+  <div class="container" id="checkout-container">
+    <h2>Your Cart</h2>
+    <div id="cart-items"></div>
+    <p class="total" id="cart-total">Total: $0</p>
+
+    <h2>Enter Details</h2>
+    <form id="checkout-form">
+      <div>
+        <label for="name">Name</label>
+        <input type="text" id="name" required>
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" required>
+      </div>
+      <div>
+        <label for="card">Card Number</label>
+        <input type="text" id="card" placeholder="**** **** **** ****" required>
+      </div>
+      <button type="submit">Complete Purchase</button>
+    </form>
+  </div>
+
+  <div class="confirmation" id="confirmation">
+    <h2>🔥 Thank You, Ember Keeper 🔥</h2>
+    <p>Your order has been sealed in flame. You will receive a raven (or an email) shortly.</p>
+    <p><a href="index.html">← Return to the Club</a></p>
+  </div>
+
+  <script>
+    // Fake cart data (in a real site, you'd pass this from index.html)
+    const cart = [
+      { name: "Dragon's Breath Pipe", price: 180 },
+      { name: "Ghost Root Pipe", price: 150 }
+    ];
+
+    const cartItemsEl = document.getElementById("cart-items");
+    const cartTotalEl = document.getElementById("cart-total");
+
+    function renderCart() {
+      let total = 0;
+      cartItemsEl.innerHTML = "";
+      cart.forEach(item => {
+        const div = document.createElement("div");
+        div.className = "cart-item";
+        div.innerHTML = `<span>${item.name}</span><span>$${item.price}</span>`;
+        cartItemsEl.appendChild(div);
+        total += item.price;
+      });
+      cartTotalEl.textContent = "Total: $" + total;
+    }
+
+    renderCart();
+
+    // Handle checkout form
+    const form = document.getElementById("checkout-form");
+    const container = document.getElementById("checkout-container");
+    const confirmation = document.getElementById("confirmation");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      container.style.display = "none";
+      confirmation.style.display = "block";
+    });
+  <script>
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  const cartItemsEl = document.getElementById("cart-items");
+  const cartTotalEl = document.getElementById("cart-total");
+
+  function renderCart() {
+    let total = 0;
+    cartItemsEl.innerHTML = "";
+    if (cart.length === 0) {
+      cartItemsEl.innerHTML = "<p>Your cart is empty.</p>";
+      cartTotalEl.textContent = "Total: $0";
+      return;
+    }
+    cart.forEach(item => {
+      const div = document.createElement("div");
+      div.className = "cart-item";
+      div.innerHTML = `<span>${item.name}</span><span>$${item.price}</span>`;
+      cartItemsEl.appendChild(div);
+      total += item.price;
+    });
+    cartTotalEl.textContent = "Total: $" + total;
+  }
+
+  renderCart();
+
+  // Handle checkout form
+  const form = document.getElementById("checkout-form");
+  const container = document.getElementById("checkout-container");
+  const confirmation = document.getElementById("confirmation");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    localStorage.removeItem("cart"); // clear cart after checkout
+    container.style.display = "none";
+    confirmation.style.display = "block";
+  });
+</script>
